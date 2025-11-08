@@ -457,165 +457,8 @@
         </div>
     </div>
 
-    <script>
-        /* ---------------------------
-           Sample products (customize)
-              - Replace image URLs with your own hosted images (postimg, imgur, or your server)
-                 - Use real SKUs if you want
-                 ----------------------------*/
-        const products = [
-            { id: 1, name: 'Resistance Band Set (5 pcs)', price: 900, img: 'https://i.postimg.cc/8kQ3Kq1T/resistance-bands.jpg', desc: 'Light to heavy set for progressive exercises.' },
-            { id: 2, name: 'Foam Roller 45cm', price: 1200, img: 'https://i.postimg.cc/FFs0ZxvK/foam-roller.jpg', desc: 'Relieves tight muscles and improves recovery.' },
-            { id: 3, name: 'TENS Unit (Portable)', price: 4200, img: 'https://i.postimg.cc/7P5s4D8P/tens-unit.jpg', desc: 'Portable pain relief device — follow instructions.' },
-            { id: 4, name: 'Knee Support Brace (Adjustable)', price: 1600, img: 'https://i.postimg.cc/pT8kY0m4/knee-brace.jpg', desc: 'Comfortable neoprene support for mild instability.' },
-            { id: 5, name: 'Massage Ball (Set of 2)', price: 550, img: 'https://i.postimg.cc/9Q7zvK7L/massage-ball.jpg', desc: 'Trigger point release for plantar fasciitis & back.' },
-            { id: 6, name: 'TheraBand Door Anchor', price: 450, img: 'https://i.postimg.cc/4x2KfcQm/door-anchor.jpg', desc: 'Attach bands to doors for resistance exercises.' },
-        ];/* ---------- App state ---------- */
-        let cart = JSON.parse(localStorage.getItem('ps_cart') || '[]');
-
-        function saveCart() {
-            localStorage.setItem('ps_cart', JSON.stringify(cart));
-            renderCart();
-        }
-
-        /* ---------- Render products ---------- */
-        const grid = document.getElementById('productGrid');
-        const resultsLabel = document.getElementById('resultsLabel');
-
-        function renderProducts(list) {
-            grid.innerHTML = '';
-            if (list.length === 0) { grid.innerHTML = '<div class="muted">No products found.</div>'; resultsLabel.textContent = '0 results'; return; }
-            resultsLabel.textContent = `Showing ${list.length}`;
-            list.forEach(p => {
-                const el = document.createElement('div');
-                el.className = 'card';
-                el.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <img src="${p.img}" alt="${p.name}" loading="lazy" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <h3>${p.name}</h3>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <div class="price">KES ${p.price.toLocaleString()}</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <div class="muted" style="font-size:13px">${p.desc}</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <div class="actions">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <button class="btn" data-id="${p.id}" onclick="openModal(${p.id})"><i class="fa-solid fa-eye"></i> View</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <button class="btn secondary" onclick="addToCart(${p.id},1)"><i class="fa-solid fa-cart-plus"></i> Add</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             `;
-                grid.appendChild(el);
-            });
-        }
-
-        /* ---------- Cart rendering ---------- */
-        const cartList = document.getElementById('cartList');
-        const subTotalEl = document.getElementById('subTotal');
-        const cartCountEl = document.getElementById('cartCount');
-
-        function renderCart() {
-            cartList.innerHTML = '';
-            if (cart.length === 0) {
-                cartList.innerHTML = '<div class="text-muted">Your cart is empty</div>';
-                subTotalEl.textContent = 'KES 0';
-                cartCountEl.style.display = 'none';
-                return;
-            }
-            cartCountEl.style.display = 'block';
-            let total = 0; let items = 0;
-            cart.forEach(item => {
-                const p = products.find(x => x.id === item.id);
-                const row = document.createElement('div');
-                row.className = 'cart-item';
-                row.innerHTML = `
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <img src="${p.img}" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <div class="meta">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <div style="display:flex;justify-content:space-between;align-items:center">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <strong>${p.name}</strong>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <span class="price">KES ${(p.price * item.qty).toLocaleString()}</span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <small class="muted">KES ${p.price.toLocaleString()} · SKU: ${p.id}</small>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <div class="qty-controls">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <button class="btn secondary" onclick="updateQty(${p.id}, -1)">-</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <div style="padding:6px 10px;border-radius:8px;border:1px solid #eef2f2;">${item.qty}</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <button class="btn secondary" onclick="updateQty(${p.id}, 1)">+</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <div style="margin-top:6px;text-align:right">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <button class="btn" style="background:#ef4444" onclick="removeFromCart(${p.id})">Remove</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       `;
-                cartList.appendChild(row);
-                total += p.price * item.qty;
-                items += item.qty;
-            });
-
-            subTotalEl.textContent = `KES ${total.toLocaleString()}`;
-            cartCountEl.textContent = items;
-        }
-        window.renderCart = renderCart;
-
-        /* ---------- Cart functions ---------- */
-        function addToCart(id, qty = 1) {
-            const found = cart.find(i => i.id === id);
-            if (found) found.qty += qty; else cart.push({ id, qty });
-            saveCart();
-            // show small confirmation
-            alert('Added to cart');
-        }
-
-        function updateQty(id, delta) {
-            const item = cart.find(i => i.id === id);
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-            saveCart();
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(i => i.id !== id);
-            saveCart();
-        }
-
-        /* ---------- Modal product view ---------- */
-        const modal = document.getElementById('modal');
-        const modalImg = document.getElementById('modalImg');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalPrice = document.getElementById('modalPrice');
-        const modalDesc = document.getElementById('modalDesc');
-        const modalQty = document.getElementById('modalQty');
-        const modalAdd = document.getElementById('modalAdd');
-        const modalClose = document.getElementById('modalClose');
-        let modalProductId = null;
-
-        function openModal(id) {
-            const p = products.find(x => x.id === id);
-            modalProductId = id;
-            modalImg.src = p.img;
-            modalTitle.textContent = p.name;
-            modalPrice.textContent = 'KES ' + p.price.toLocaleString();
-            modalDesc.textContent = p.desc;
-            modalQty.value = 1;
-            modal.classList.add('open');
-        }
-
-        modalClose.addEventListener('click', () => modal.classList.remove('open'));
-        modalAdd.addEventListener('click', () => {
-            const q = parseInt(modalQty.value || '1', 10);
-            addToCart(modalProductId, q);
-            modal.classList.remove('open');
-        });
-
-        /* Close modal when clicking outside */
-        document.querySelectorAll('.modal').forEach(m => {
-            m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('open'); });
-        });
-        /* ---------- Checkout ---------- */
-        const checkoutModal = document.getElementById('checkoutModal');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        const checkoutCancel = document.getElementById('checkoutCancel');
-        const checkoutForm = document.getElementById('checkoutForm');
-        const checkoutSummary = document.getElementById('checkoutSummary');
-        const payMethodEl = document.getElementById('payMethod');
-        const mpesaInstructions = document.getElementById('mpesaInstructions');
-
+    
+        
         checkoutBtn.addEventListener('click', () => {
             if (cart.length === 0) { alert('Cart is empty'); return; }
             // build summary
@@ -640,61 +483,226 @@
         checkoutForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const fd = new FormData(checkoutForm);
-            const order = {
-                id: 'ORD' + Date.now(),
-                name: fd.get('name'),
-                phone: fd.get('phone'),
-                address: fd.get('address'),
-                payMethod: fd.get('payMethod'),
-                items: cart,
-                total: (function () { let t = 0; cart.forEach(i => { const p = products.find(x => x.id === i.id); t += p.price * i.qty }); return t })()
-            };
-            // For demo: store orders in localStorage
-            const orders = JSON.parse(localStorage.getItem('ps_orders') || '[]');
-            orders.unshift(order);
-            localStorage.setItem('ps_orders', JSON.stringify(orders));
+    <script>
+/* ---------------------------
+   Sample products
+   Replace image URLs with your own hosted images
+----------------------------*/
+const products = [
+  {id:1, name:'Resistance Band Set (5 pcs)', price:900, img:'https://i.postimg.cc/8kQ3Kq1T/resistance-bands.jpg', desc:'Light to heavy set for progressive exercises.'},
+  {id:2, name:'Foam Roller 45cm', price:1200, img:'https://i.postimg.cc/FFs0ZxvK/foam-roller.jpg', desc:'Relieves tight muscles and improves recovery.'},
+  {id:3, name:'TENS Unit (Portable)', price:4200, img:'https://i.postimg.cc/7P5s4D8P/tens-unit.jpg', desc:'Portable pain relief device — follow instructions.'},
+  {id:4, name:'Knee Support Brace (Adjustable)', price:1600, img:'https://i.postimg.cc/pT8kY0m4/knee-brace.jpg', desc:'Comfortable neoprene support for mild instability.'},
+  {id:5, name:'Massage Ball (Set of 2)', price:550, img:'https://i.postimg.cc/9Q7zvK7L/massage-ball.jpg', desc:'Trigger point release for plantar fasciitis & back.'},
+  {id:6, name:'TheraBand Door Anchor', price:450, img:'https://i.postimg.cc/4x2KfcQm/door-anchor.jpg', desc:'Attach bands to doors for resistance exercises.'},
+];
 
-            // Clear cart
-            cart = []; saveCart();
+/* ---------- App state ---------- */
+let cart = JSON.parse(localStorage.getItem('ps_cart') || '[]');
+function saveCart(){
+  localStorage.setItem('ps_cart', JSON.stringify(cart));
+  renderCart();
+}
 
-            checkoutModal.classList.remove('open');
-            alert('Order placed (demo). Order ID: ' + order.id + '\\nIf you chose MPesa, follow the instructions and send receipt via WhatsApp.');
-        });
+/* ---------- Render products ---------- */
+const grid = document.getElementById('productGrid');
+const resultsLabel = document.getElementById('resultsLabel');
+function renderProducts(list){
+  grid.innerHTML = '';
+  if(list.length === 0){ 
+    grid.innerHTML = '<div class="muted">No products found.</div>'; 
+    resultsLabel.textContent = '0 results'; 
+    return; 
+  }
+  resultsLabel.textContent = `Showing ${list.length}`;
+  list.forEach(p=>{
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `
+      <img src="${p.img}" alt="${p.name}" loading="lazy" />
+      <h3>${p.name}</h3>
+      <div class="price">KES ${p.price.toLocaleString()}</div>
+      <div class="muted" style="font-size:13px">${p.desc}</div>
+      <div class="actions">
+        <button class="btn" data-id="${p.id}" onclick="openModal(${p.id})"><i class="fa-solid fa-eye"></i> View</button>
+        <button class="btn secondary" onclick="addToCart(${p.id},1)"><i class="fa-solid fa-cart-plus"></i> Add</button>
+      </div>
+    `;
+    grid.appendChild(el);
+  });
+}
 
-        /* ---------- Order view button ---------- */
-        document.getElementById('viewOrdersBtn').addEventListener('click', () => {
-            const orders = JSON.parse(localStorage.getItem('ps_orders') || '[]');
-            if (orders.length === 0) return alert('No orders yet.');
-            let out = 'Recent orders:\\n';
-            orders.slice(0, 6).forEach(o => { out += `${o.id} — ${o.name} KES ${o.total}\\n`; });
-            alert(out);
-        });
+/* ---------- Cart rendering ---------- */
+const cartList = document.getElementById('cartList');
+const subTotalEl = document.getElementById('subTotal');
+const cartCountEl = document.getElementById('cartCount');
+function renderCart(){
+  cartList.innerHTML = '';
+  if(cart.length === 0){
+    cartList.innerHTML = '<div class="text-muted">Your cart is empty</div>';
+    subTotalEl.textContent = 'KES 0';
+    cartCountEl.style.display = 'none';
+    return;
+  }
+  cartCountEl.style.display = 'block';
+  let total = 0; let items = 0;
+  cart.forEach(item=>{
+    const p = products.find(x=>x.id===item.id);
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <img src="${p.img}" />
+      <div class="meta">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong>${p.name}</strong>
+          <span class="price">KES ${(p.price*item.qty).toLocaleString()}</span>
+        </div>
+        <small class="muted">KES ${p.price.toLocaleString()} · SKU: ${p.id}</small>
+      </div>
+      <div>
+        <div class="qty-controls">
+          <button class="btn secondary" onclick="updateQty(${p.id}, -1)">-</button>
+          <div style="padding:6px 10px;border-radius:8px;border:1px solid #eef2f2;">${item.qty}</div>
+          <button class="btn secondary" onclick="updateQty(${p.id}, 1)">+</button>
+        </div>
+        <div style="margin-top:6px;text-align:right">
+          <button class="btn" style="background:#ef4444" onclick="removeFromCart(${p.id})">Remove</button>
+        </div>
+      </div>
+    `;
+    cartList.appendChild(row);
+    total += p.price * item.qty;
+    items += item.qty;
+  });
+  subTotalEl.textContent = `KES ${total.toLocaleString()}`;
+  cartCountEl.textContent = items;
+}
+window.renderCart = renderCart;
 
-        /* ---------- Search ---------- */
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const q = e.target.value.trim().toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-            renderProducts(filtered);
-        });
+/* ---------- Cart functions ---------- */
+function addToCart(id, qty=1){
+  const found = cart.find(i=>i.id===id);
+  if(found) found.qty += qty; else cart.push({id, qty});
+  saveCart();
+  alert('Added to cart');
+}
+function updateQty(id, delta){
+  const item = cart.find(i=>i.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) cart = cart.filter(i=>i.id!==id);
+  saveCart();
+}
+function removeFromCart(id){
+  cart = cart.filter(i=>i.id!==id);
+  saveCart();
+}
 
-        /* ---------- Init ---------- */
-        document.getElementById('year').textContent = new Date().getFullYear();
-        renderProducts(products);
-        renderCart();
+/* ---------- Modal product view ---------- */
+const modal = document.getElementById('modal');
+const modalImg = document.getElementById('modalImg');
+const modalTitle = document.getElementById('modalTitle');
+const modalPrice = document.getElementById('modalPrice');
+const modalDesc = document.getElementById('modalDesc');
+const modalQty = document.getElementById('modalQty');
+const modalAdd = document.getElementById('modalAdd');
+const modalClose = document.getElementById('modalClose');
+let modalProductId = null;
+function openModal(id){
+  const p = products.find(x=>x.id===id);
+  modalProductId = id;
+  modalImg.src = p.img;
+  modalTitle.textContent = p.name;
+  modalPrice.textContent = 'KES ' + p.price.toLocaleString();
+  modalDesc.textContent = p.desc;
+  modalQty.value = 1;
+  modal.classList.add('open');
+}
+modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
+modalAdd.addEventListener('click', ()=>{
+  const q = parseInt(modalQty.value || '1', 10);
+  addToCart(modalProductId, q);
+  modal.classList.remove('open');
+});
+document.querySelectorAll('.modal').forEach(m=>{
+  m.addEventListener('click', (e)=>{ if(e.target === m) m.classList.remove('open'); });
+});
 
-        /* expose some functions for inline onclick usage */
-        window.addToCart = addToCart;
-        window.updateQty = updateQty;
-        window.removeFromCart = removeFromCart;
-        window.openModal = openModal;
+/* ---------- Place Order / Checkout ---------- */
+document.getElementById('placeOrderBtn').addEventListener('click', () => {
+  if(cart.length === 0) return alert('Your cart is empty!');
 
-        /* Optional: open cart panel when click cart button (simple) */
-        document.getElementById('openCart').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            // small visual hint
-            alert('Scroll right side to see your cart and checkout.');
-        });
+  const order = {
+    id: 'ORD' + Date.now(),
+    name: document.getElementById('customerName')?.value || 'Guest',
+    total: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
+    items: [...cart],
+    date: new Date().toLocaleString()
+  };
+
+  // Save order locally
+  const orders = JSON.parse(localStorage.getItem('ps_orders') || '[]');
+  orders.unshift(order);
+  localStorage.setItem('ps_orders', JSON.stringify(orders));
+
+  // MPesa Payment Step
+  const phoneNumber = prompt(`Your total is KES ${order.total}. Enter your MPesa number to pay:`);
+  if (phoneNumber) {
+    alert(`MPesa payment request sent to ${phoneNumber}.\nPlease complete payment.`);
+
+    // Send receipt via WhatsApp
+    const receiptMsg = encodeURIComponent(
+      `Hello! I have completed payment for order ${order.id}.\nTotal: KES ${order.total}\nName: ${order.name}`
+    );
+    const whatsappLink = `https://wa.me/254700000000?text=${receiptMsg}`; // replace with your WhatsApp number
+    if (confirm("Do you want to send your MPesa receipt via WhatsApp now?")) {
+      window.open(whatsappLink, "_blank");
+    }
+
+    cart = [];
+    saveCart();
+    alert(`Order placed successfully! Order ID: ${order.id}`);
+  } else {
+    alert('Payment cancelled. Your cart is still intact.');
+  }
+});
+
+/* ---------- View Orders ---------- */
+document.getElementById('viewOrdersBtn').addEventListener('click', ()=>{
+  const orders = JSON.parse(localStorage.getItem('ps_orders') || '[]');
+  if(orders.length === 0) return alert('No orders yet.');
+  let out = 'Recent orders:\n';
+  orders.slice(0,6).forEach(o=>{
+    out += `${o.id} — ${o.name} KES ${o.total}\n`;
+  });
+  alert(out);
+});
+
+/* ---------- Search ---------- */
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  const q = e.target.value.trim().toLowerCase();
+  const filtered = products.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
+  renderProducts(filtered);
+});
+
+/* ---------- Open Cart Panel ---------- */
+document.getElementById('openCart').addEventListener('click', ()=> {
+  window.scrollTo({top:0, behavior:'smooth'});
+  alert('Scroll to the right side to see your cart and checkout.');
+});
+
+/* ---------- Expose functions for inline onclick usage ---------- */
+window.addToCart = addToCart;
+window.updateQty = updateQty;
+window.removeFromCart = removeFromCart;
+window.openModal = openModal;
+
+/* ---------- Init ---------- */
+document.getElementById('year').textContent = new Date().getFullYear();
+renderProducts(products);
+renderCart();
     </script>
+
     </body>
 
 </html>
