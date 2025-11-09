@@ -93,6 +93,18 @@
   transform: scale(1.1);
   background-color: #20ba5a;
 }
+  /* Make body and wrapper cover full screen */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;  /* Make sure body takes full height */
+}
+
+.wrap {
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+}
 </style>
 </head>
 <body>
