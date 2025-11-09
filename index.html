@@ -40,14 +40,6 @@
   .content{display:grid;grid-template-columns:1fr 350px;gap:20px;margin-top:18px}
   @media (max-width:900px){ .content{grid-template-columns:1fr} .sidebar{order:2} }
 
-  /* Products */
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  @media (min-width:900px){ .grid{grid-template-columns:repeat(3,1fr)} }
-  .card{background:var(--card);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(10,10,10,0.05);display:flex;flex-direction:column;gap:8px}
-  .card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
-  .card h3{margin:0;font-size:15px}
-  .price{font-weight:600;color:var(--accent)}
-  .card .actions{margin-top:auto;display:flex;gap:8px}
 
   /* Sidebar (cart) */
   .sidebar{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(10,10,10,0.05)}
@@ -57,7 +49,60 @@
   .cart-item .meta{flex:1}
   .cart-item small{color:var(--muted)}
   .qty-controls{display:flex;gap:6px;align-items:center}
-  .btn{background:var(--accent);color:white;padding:10px 12px;border-radius:10px;border:none;cursor:pointer}
+  .btn{background:var(--accent);color:white;padding/* Products */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr; /* single column for mobile */
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* two columns on larger screens */
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr); /* three columns on desktop */
+  }
+}
+
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 6px 18px rgba(10, 10, 10, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  /* Full screen height on mobile */
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.card img {
+  width: 100%;
+  height: 50%; /* image takes half of screen height */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card h3, .price, .card .actions {
+  flex-shrink: 0;
+}
+
+/* Adjust layout for larger screens */
+@media (min-width: 600px) {
+  .card {
+    height: auto; /* normal height for tablets and desktop */
+  }
+
+  .card img {
+    height: 150px; /* fixed height for images */
+  }
+}:10px 12px;border-radius:10px;border:none;cursor:pointer}
   .btn.secondary{background:#e6eef0;color:#064e4e}
   .text-muted{color:var(--muted);font-size:13px}
 
