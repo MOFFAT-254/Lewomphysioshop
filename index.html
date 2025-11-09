@@ -1,589 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PhysioShop — Physiotherapy Products</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LewomPhysioShop — Professional Physiotherapy Store</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-  :root{
-    --bg:#f7fafc; --card:#ffffff; --accent:#0ea5a4; --muted:#6b7280;
-    --max-width:1100px;
-  }
-  *{box-sizing:border-box}
-  body{
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    margin:0; background:var(--bg); color:#111;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  /* Header */
-  .wrap{max-width:var(--max-width); margin:18px auto; padding:0 16px;}
-  header{display:flex;align-items:center;justify-content:space-between; gap:12px;}
-  .brand{display:flex;align-items:center;gap:10px;}
-  .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#06b6d4,#0891b2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-  .brand h1{font-size:18px;margin:0}
-  .search{flex:1;margin-left:12px;display:flex}
-  .search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #e6e9ee;background:white}
-  .cart-btn{position:relative}
-  .cart-count{position:absolute;top:-6px;right:-6px;background:#ef4444;color:white;font-size:12px;padding:2px 6px;border-radius:20px}
-
-  /* Hero */
-  .hero{margin:18px 0;background:linear-gradient(180deg, rgba(6,182,180,0.06), rgba(6,182,180,0.03)); padding:18px;border-radius:12px;display:flex;gap:12px;align-items:center}
-  .hero .txt{flex:1}
-  .hero h2{margin:0 0 6px 0}
-  .hero p{margin:0;color:var(--muted)}
-
-  /* Layout */
-  .content{display:grid;grid-template-columns:1fr 350px;gap:20px;margin-top:18px}
-  @media (max-width:900px){ .content{grid-template-columns:1fr} .sidebar{order:2} }
-  /* Cart below search */
-.cart-container {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 6px 18px rgba(10,10,10,0.05);
-  margin-top: 12px; /* space below search */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:#f9f9f9;color:blue;line-height:1.6;}
+header{
+  background:red;color:#fff;padding:16px 10px;
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+header h1{font-size:1.5em;cursor:pointer;}
+nav{display:flex;gap:15px;transition:all 0.3s ease;}
+nav a{color:#fff;text-decoration:none;font-weight:600;position:relative;}
+nav a::after{content:"";position:absolute;width:0%;height:2px;bottom:-2px;left:0;background:#fff;transition:0.3s;}
+nav a:hover::after{width:100%;}
+.menu-toggle{display:none;font-size:1.8em;cursor:pointer;}
+@media(max-width:768px){
+  nav{display:none;flex-direction:column;background:red;position:absolute;top:60px;right:10px;padding:10px;border-radius:8px;}
+  nav.show{display:flex;}
+  .menu-toggle{display:block;}
 }
 
-.cart-list {
-  max-height: 380px;
-  overflow-y: auto;
-  margin-bottom: 12px;
+section{padding:50px 20px;max-width:1100px;margin:auto;scroll-margin-top:70px;}
+h2{text-align:center;margin-bottom:30px;color:red;position:relative;}
+h2::after{content:"";display:block;width:60px;height:3px;background:blue;margin:8px auto 0;border-radius:2px;}
+
+.home{text-align:center;}
+.home img{max-width:400px;margin-top:20px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.2);width:100%;transition:transform 0.4s;}
+.home img:hover{transform:scale(1.05);}
+
+.about p{max-width:750px;margin:auto;font-size:1.05em;text-align:center;color:#333;}
+
+.filter-search{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:20px;
 }
-
-.cart-item {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  border-bottom: 1px solid #f1f5f9;
-  padding: 8px 0;
+.filter-search input{padding:10px 15px;border-radius:8px;border:1px solid #ccc;width:200px;}
+.filter-search button{
+  padding:10px 15px;border:none;border-radius:8px;background:blue;color:#fff;cursor:pointer;transition:0.3s;
 }
+.filter-search button:hover{opacity:0.85;transform:scale(1.05);}
 
-.cart-item img {
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
-  border-radius: 8px;
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;}
+.card{
+  background:#fff;border-radius:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+  padding:20px;text-align:center;
+  transition:transform 0.3s, box-shadow 0.3s;
+  position:relative;
 }
-
-.cart-item .meta {
-  flex: 1;
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.2);
 }
-
-.cart-item small {
-  color: var(--muted);
+.card img{width:100%;border-radius:12px;height:180px;object-fit:cover;transition:transform 0.3s;}
+.card img:hover{transform:scale(1.05);}
+.card h3{margin:15px 0 10px;font-size:1.2em;color:blue;}
+.price{color:red;font-weight:700;margin-bottom:12px;}
+.card button{
+  background:red;
+  color:#fff;border:none;padding:10px 15px;border-radius:8px;
+  cursor:pointer;margin:5px;
+  transition:transform 0.2s,opacity 0.2s;
 }
+.card button:hover{opacity:0.9;transform:scale(1.05);}
 
-.qty-controls {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+.cart-container{
+  background:#fff;padding:20px;margin-top:40px;border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+  position:sticky;top:80px;
 }
+.cart-item{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #ddd;}
+.cart-item:last-child{border-bottom:none;}
+.cart-item button{background:red;color:#fff;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:0.85em;}
+.cart-item button:hover{opacity:0.85;}
 
-.btn {
-  background: var(--accent);
-  color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.delivery{background:#eaf2ff;border-radius:15px;padding:25px;text-align:center;}
+.delivery p{font-size:1.05em;color:#333;}
+
+form{display:flex;flex-direction:column;gap:15px;max-width:450px;margin:auto;}
+input,textarea{padding:12px;border-radius:8px;border:1px solid #ccc;transition:border 0.3s;}
+input:focus,textarea:focus{border-color:red;outline:none;}
+button.submit{
+  background:blue;
+  color:#fff;padding:12px;border:none;border-radius:8px;cursor:pointer;
+  font-weight:600;transition:transform 0.2s,opacity 0.2s;
 }
+button.submit:hover{transform:scale(1.05);opacity:0.9;}
 
-/* Products Grid */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr; /* single column for mobile */
-  gap: 12px;
+footer{text-align:center;padding:20px;background:red;color:#fff;margin-top:50px;font-size:0.9em;}
+.whatsapp-float{
+  position:fixed;bottom:25px;right:25px;
+  background:green;
+  color:#fff;width:60px;height:60px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;box-shadow:0 6px 15px rgba(0,0,0,0.3);
+  cursor:pointer;z-index:100;transition:transform 0.2s;
 }
-
-@media (min-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr); /* two columns on larger screens */
-  }
-}
-
-@media (min-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr); /* three columns on desktop */
-  }
-}
-
-.card {
-  background: var(--card);
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 6px 18px rgba(10,10,10,0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-
-
-  /* Full screen height on mobile */
-  height: 100vh;
-  box-sizing: border-box;
-}
-
-.card img {
-  width: 100%;
-  height: 50%; /* image takes half of screen height */
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.card h3, .price, .card .actions {
-  flex-shrink: 0;
-}
-
-/* Adjust layout for larger screens */
-@media (min-width: 600px) {
-  .card {
-    height: auto; /* normal height for tablets and desktop */
-  }
-
-  .card img {
-    height: 150px; /* fixed height for images */
-  }
-}:10px 12px;border-radius:10px;border:none;cursor:pointer}
-  .btn.secondary{background:#e6eef0;color:#064e4e}
-  .text-muted{color:var(--muted);font-size:13px}
-
-  /* Modal */
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:16px}
-  .modal.open{display:flex}
-  .modal-card{width:100%;max-width:720px;background:white;border-radius:12px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .modal img{width:100%;height:260px;object-fit:cover;border-radius:8px}
-  @media (max-width:720px){ .modal-card{grid-template-columns:1fr; } .modal img{height:220px} }
-
-  footer{margin:28px 0 60px 0;text-align:center;color:var(--muted);font-size:13px}
-  a{color:var(--accent); text-decoration:none}
-  /* small utilities */
-  .muted{color:var(--muted)}
-  .whatsapp-float {
-  position: fixed;
-  bottom: 18px;
-  right: 18px;
-  background-color: #25d366;
-  color: white;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  font-size: 26px;
-  z-index: 1000;
-  transition: transform 0.25s ease;
-}
-.whatsapp-float:hover {
-  transform: scale(1.1);
-  background-color: #20ba5a;
-}
-  /* Make body and wrapper cover full screen */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;  /* Make sure body takes full height */
-}
-
-.wrap {
-    min-height: 100vh; /* Full viewport height */
-    display: flex;
-    flex-direction: column;
-}
+.whatsapp-float:hover{transform:scale(1.1);}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div style="display:flex;align-items:center;">
-        <div class="brand">
-          <div class="logo">PS</div>
-          <div>
-            <h1>PhysioShop</h1>
-            <div class="muted" style="font-size:12px">Quality physiotherapy supplies</div>
-          </div>
-        </div>
-      </div>
 
-      <div class="search" style="max-width:520px;">
-        <input id="searchInput" placeholder="Search products, e.g., resistance band, TENS..." />
-      </div>
+<header>
+<h1 onclick="scrollToTop()">LewomPhysioShop</h1>
+<i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+<nav id="nav">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#products">Products</a>
+  <a href="#delivery">Delivery</a>
+  <a href="#contact">Contact</a>
+</nav>
+</header>
 
-      <div style="display:flex;align-items:center;gap:12px">
-        <button class="btn secondary" id="viewOrdersBtn"><i class="fa-solid fa-box"></i>&nbsp;<span class="text-muted">Orders</span></button>
-        <div class="cart-btn">
-          <button class="btn" id="openCart"><i class="fa-solid fa-cart-shopping"></i> Cart</button>
-          <div class="cart-count" id="cartCount" style="display:none">0</div>
-        </div>
-      </div>
-    </header>
+<section id="home" class="home">
+<h2>Welcome to LewomPhysioShop</h2>
+<p>Your trusted physiotherapy store. Order conveniently via WhatsApp.</p>
+<img src="https://via.placeholder.com/400x220?text=Physiotherapy+Store" alt="Physiotherapy Products">
+</section>
 
-    <section class="hero">
-      <div class="txt">
-        <h2>Trusted physiotherapy products — delivered locally</h2>
-        <p>Resistance bands, massage balls, TENS units, braces and more. Secure checkout & MPesa instructions available.</p>
-      </div>
-      <div style="min-width:120px;text-align:right">
-        <a href="#products" class="btn">Shop Now</a>
-      </div>
-    </section>
+<section id="about" class="about">
+<h2>About Us</h2>
+<p>LewomPhysioShop offers quality physiotherapy products with fast WhatsApp ordering. Safe delivery and professional shopping experience guaranteed.</p>
+</section>
 
-    <div class="content">
-      <main>
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <h3 id="products">Products</h3>
-          <div class="text-muted" id="resultsLabel">Showing all</div>
-        </div>
+<section id="products" class="products-section">
+<h2>Our Products</h2>
+<div class="filter-search">
+<input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+<button onclick="filterCategory('All')">All</button>
+<button onclick="filterCategory('Braces')">Braces</button>
+<button onclick="filterCategory('Supports')">Supports</button>
+<button onclick="filterCategory('Massage')">Massage</button>
+</div>
+<div class="products" id="product-list"></div>
 
-        <div class="grid" id="productGrid"></div>
-      </main>
+<div class="cart-container" id="cart">
+<h3>Your Cart</h3>
+<div id="cart-items"></div>
+<p><strong>Total:</strong> KSh <span id="cart-total">0</span></p>
+<button class="submit" onclick="orderViaWhatsApp()">Order via WhatsApp</button>
+</div>
+</section>
 
-      <aside class="sidebar">
-        <h3>Cart</h3>
-        <div class="cart-list" id="cartList">
-          <div class="text-muted">Your cart is empty</div>
-        </div>
+<section id="delivery" class="delivery">
+<h2>Delivery Information</h2>
+<p>Nationwide delivery within 1–3 working days. Orders above KSh 5,000 enjoy free delivery.</p>
+</section>
 
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div>
-            <div class="text-muted">Subtotal</div>
-            <div id="subTotal">KES 0</div>
-          </div>
-          <div>
-            <button class="btn" id="checkoutBtn">Checkout</button>
-          </div>
-        </div>
+<section id="contact">
+<h2>Contact Us</h2>
+<form onsubmit="sendMessage(event)">
+<input type="text" id="name" placeholder="Your Name" required>
+<input type="email" id="email" placeholder="Your Email" required>
+<textarea id="message" rows="4" placeholder="Your Message" required></textarea>
+<button type="submit" class="submit">Send Message</button>
+</form>
+</section>
 
-        <div class="muted" style="font-size:13px">
-          <div>Pickup available | Local delivery within Nairobi</div>
-          <div style="margin-top:8px">Contact: <a href="tel:+254700000000">+254 700 000 000</a></div>
-        </div>
-      </aside>
-    </div>
+<footer>
+<p>© 2025 LewomPhysioShop</p>
+</footer>
 
-    <footer>
-      &copy; <span id="year"></span> PhysioShop · Built with ❤️ · <a href="mailto:moffatogutu255@gmail.com">moffatogutu255@gmail.com</a>
-    </footer>
-  </div>
-
-  <!-- Product Quick View Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div>
-        <img id="modalImg" src="" alt="product image" />
-      </div>
-      <div>
-        <h3 id="modalTitle">Product name</h3>
-        <div class="price" id="modalPrice">KES 0</div>
-        <p id="modalDesc" class="muted">Description</p>
-
-        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-          <label>Qty</label>
-          <input id="modalQty" type="number" value="1" min="1" style="width:70px;padding:6px;border-radius:8px;border:1px solid #e6eef0" />
-        </div>
-
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <button class="btn" id="modalAdd">Add to cart</button>
-          <button class="btn secondary" id="modalClose">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Checkout Modal (simple) -->
-  <div class="modal" id="checkoutModal">
-    <div class="modal-card" style="max-width:640px">
-      <div style="grid-column:1/-1">
-        <h3>Checkout</h3>
-        <div class="muted">Fill your details. This is a demo — no live payment.</div>
-      </div>
-
-      <form id="checkoutForm" style="display:grid;gap:8px;margin-top:8px">
-        <input name="name" placeholder="Full name" required style="padding:10px;border-radius:8px;border:1px solid #e6eef0" />
-        <input name="phone" placeholder="Phone (e.g., 2547XXXXXXXX)" required style="padding:10px;border-radius:8px;border:1px solid #e6eef0" />
-        <input name="address" placeholder="Delivery address" required style="padding:10px;border-radius:8px;border:1px solid #e6eef0" />
-        <label class="muted">Payment method</label>
-        <select name="payMethod" id="payMethod" style="padding:10px;border-radius:8px;border:1px solid #e6eef0">
-          <option value="mpesa">MPesa (STK Push not implemented — instructions shown)</option>
-          <option value="card">Card (simulate)</option>
-          <option value="cod">Cash on Delivery</option>
-        </select>
-
-        <div id="mpesaInstructions" class="muted" style="padding:10px;border-radius:8px;border:1px solid #eef2f2;display:none">
-          <strong>MPesa instructions (demo):</strong>
-          <div>1. Go to your M-Pesa → Lipa na M-Pesa → Paybill</div>
-          <div>2. Use Business/Paybill: <strong>123456</strong></div>
-          <div>3. Account: your phone number</div>
-          <div>4. Amount: total shown on the right</div>
-          <div>After payment, press submit and send MPesa receipt via WhatsApp to +254700000000</div>
-        </div>
-
-        <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:6px">
-          <button type="button" class="btn secondary" id="checkoutCancel">Cancel</button>
-          <button class="btn" type="submit">Place order</button>
-        </div>
-      </form>
-
-      <div style="margin-top:12px">
-        <h4>Order summary</h4>
-        <div id="checkoutSummary" class="muted"></div>
-      </div>
-    </div>
-  </div>
+<div class="whatsapp-float" onclick="openWhatsApp()">
+<i class="fab fa-whatsapp"></i>
+</div>
 
 <script>
-/* ---------------------------
-   Sample products (customize)
-   - Replace image URLs with your own hosted images (postimg, imgur, or your server)
-   - Use real SKUs if you want
-----------------------------*/
-const products = [
-  {id:1, name:'Resistance Band Set (5 pcs)', price:900, img:'https://i.postimg.cc/8kQ3Kq1T/resistance-bands.jpg', desc:'Light to heavy set for progressive exercises.'},
-  {id:2, name:'Foam Roller 45cm', price:1200, img:'https://i.postimg.cc/FFs0ZxvK/foam-roller.jpg', desc:'Relieves tight muscles and improves recovery.'},
-  {id:3, name:'TENS Unit (Portable)', price:4200, img:'https://i.postimg.cc/7P5s4D8P/tens-unit.jpg', desc:'Portable pain relief device — follow instructions.'},
-  {id:4, name:'Knee Support Brace (Adjustable)', price:1600, img:'https://i.postimg.cc/pT8kY0m4/knee-brace.jpg', desc:'Comfortable neoprene support for mild instability.'},
-  {id:5, name:'Massage Ball (Set of 2)', price:550, img:'https://i.postimg.cc/9Q7zvK7L/massage-ball.jpg', desc:'Trigger point release for plantar fasciitis & back.'},
-  {id:6, name:'TheraBand Door Anchor', price:450, img:'https://i.postimg.cc/4x2KfcQm/door-anchor.jpg', desc:'Attach bands to doors for resistance exercises.'},
+const products=[
+{name:'Knee Brace',price:2000,category:'Braces',img:'https://via.placeholder.com/250x180?text=Knee+Brace'},
+{name:'Elbow Brace',price:1500,category:'Braces',img:'https://via.placeholder.com/250x180?text=Elbow+Brace'},
+{name:'Wrist Brace',price:1000,category:'Braces',img:'https://via.placeholder.com/250x180?text=Wrist+Brace'},
+{name:'Ankle Brace',price:1200,category:'Braces',img:'https://via.placeholder.com/250x180?text=Ankle+Brace'},
+{name:'Back Support',price:2500,category:'Supports',img:'https://via.placeholder.com/250x180?text=Back+Support'},
+{name:'Lumbar Support',price:1800,category:'Supports',img:'https://via.placeholder.com/250x180?text=Lumbar+Support'},
+{name:'Hot Pack',price:800,category:'Supports',img:'https://via.placeholder.com/250x180?text=Hot+Pack'},
+{name:'Cold Pack',price:900,category:'Supports',img:'https://via.placeholder.com/250x180?text=Cold+Pack'},
+{name:'Massage Roller',price:1200,category:'Massage',img:'https://via.placeholder.com/250x180?text=Massage+Roller'},
+{name:'Foam Roller',price:1500,category:'Massage',img:'https://via.placeholder.com/250x180?text=Foam+Roller'},
+{name:'Massage Ball',price:700,category:'Massage',img:'https://via.placeholder.com/250x180?text=Massage+Ball'},
+{name:'Therapy Band',price:600,category:'Supports',img:'https://via.placeholder.com/250x180?text=Therapy+Band'},
+{name:'Shoulder Brace',price:1600,category:'Braces',img:'https://via.placeholder.com/250x180?text=Shoulder+Brace'},
+{name:'Neck Support',price:1300,category:'Supports',img:'https://via.placeholder.com/250x180?text=Neck+Support'},
+{name:'Finger Splint',price:500,category:'Braces',img:'https://via.placeholder.com/250x180?text=Finger+Splint'},
+{name:'Hand Therapy Ball',price:700,category:'Massage',img:'https://via.placeholder.com/250x180?text=Hand+Therapy+Ball'},
+{name:'Hip Support',price:2200,category:'Supports',img:'https://via.placeholder.com/250x180?text=Hip+Support'},
+{name:'Knee Pad',price:1100,category:'Braces',img:'https://via.placeholder.com/250x180?text=Knee+Pad'},
+{name:'Back Roller',price:1400,category:'Massage',img:'https://via.placeholder.com/250x180?text=Back+Roller'},
+{name:'Foam Cushion',price:900,category:'Supports',img:'https://via.placeholder.com/250x180?text=Foam+Cushion'}
 ];
 
-/* ---------- App state ---------- */
-let cart = JSON.parse(localStorage.getItem('ps_cart') || '[]');
+const productList=document.getElementById('product-list');
+const cartItemsContainer=document.getElementById('cart-items');
+const cartTotal=document.getElementById('cart-total');
+let cart=[];
+let filteredCategory='All';
 
-function saveCart(){
-  localStorage.setItem('ps_cart', JSON.stringify(cart));
-  renderCart();
+function renderProducts(){
+productList.innerHTML='';
+products.forEach(p=>{
+if(filteredCategory!=='All' && p.category!==filteredCategory) return;
+const card=document.createElement('div');
+card.className='card';
+card.innerHTML=`<img src="${p.img}" alt="${p.name}">
+<h3>${p.name}</h3>
+<p class="price">KSh ${p.price}</p>
+<div>
+<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
+<button onclick="orderNow('${p.name}',${p.price})">WhatsApp</button>
+</div>`;
+productList.appendChild(card);
+});
 }
 
-/* ---------- Render products ---------- */
-const grid = document.getElementById('productGrid');
-const resultsLabel = document.getElementById('resultsLabel');
-
-function renderProducts(list){
-  grid.innerHTML = '';
-  if(list.length === 0){ grid.innerHTML = '<div class="muted">No products found.</div>'; resultsLabel.textContent = '0 results'; return; }
-  resultsLabel.textContent = `Showing ${list.length}`;
-  list.forEach(p=>{
-    const el = document.createElement('div');
-    el.className = 'card';
-    el.innerHTML = `
-      <img src="${p.img}" alt="${p.name}" loading="lazy" />
-      <h3>${p.name}</h3>
-      <div class="price">KES ${p.price.toLocaleString()}</div>
-      <div class="muted" style="font-size:13px">${p.desc}</div>
-      <div class="actions">
-        <button class="btn" data-id="${p.id}" onclick="openModal(${p.id})"><i class="fa-solid fa-eye"></i> View</button>
-        <button class="btn secondary" onclick="addToCart(${p.id},1)"><i class="fa-solid fa-cart-plus"></i> Add</button>
-      </div>
-    `;
-    grid.appendChild(el);
-  });
+function filterCategory(category){filteredCategory=category;renderProducts();}
+function searchProducts(){
+const searchTerm=document.getElementById('searchInput').value.toLowerCase();
+filteredCategory='All';
+productList.innerHTML='';
+products.forEach(p=>{
+if(p.name.toLowerCase().includes(searchTerm)){
+const card=document.createElement('div');
+card.className='card';
+card.innerHTML=`<img src="${p.img}" alt="${p.name}">
+<h3>${p.name}</h3>
+<p class="price">KSh ${p.price}</p>
+<div>
+<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
+<button onclick="orderNow('${p.name}',${p.price})">WhatsApp</button>
+</div>`;
+productList.appendChild(card);
+}
+});
 }
 
-/* ---------- Cart rendering ---------- */
-const cartList = document.getElementById('cartList');
-const subTotalEl = document.getElementById('subTotal');
-const cartCountEl = document.getElementById('cartCount');
-
-function renderCart(){
-  cartList.innerHTML = '';
-  if(cart.length === 0){
-    cartList.innerHTML = '<div class="text-muted">Your cart is empty</div>';
-    subTotalEl.textContent = 'KES 0';
-    cartCountEl.style.display = 'none';
-    return;
-  }
-  cartCountEl.style.display = 'block';
-  let total = 0; let items = 0;
-  cart.forEach(item=>{
-    const p = products.find(x=>x.id===item.id);
-    const row = document.createElement('div');
-    row.className = 'cart-item';
-    row.innerHTML = `
-      <img src="${p.img}" />
-      <div class="meta">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <strong>${p.name}</strong>
-          <span class="price">KES ${(p.price*item.qty).toLocaleString()}</span>
-        </div>
-        <small class="muted">KES ${p.price.toLocaleString()} · SKU: ${p.id}</small>
-      </div>
-      <div>
-        <div class="qty-controls">
-          <button class="btn secondary" onclick="updateQty(${p.id}, -1)">-</button>
-          <div style="padding:6px 10px;border-radius:8px;border:1px solid #eef2f2;">${item.qty}</div>
-          <button class="btn secondary" onclick="updateQty(${p.id}, 1)">+</button>
-        </div>
-        <div style="margin-top:6px;text-align:right">
-          <button class="btn" style="background:#ef4444" onclick="removeFromCart(${p.id})">Remove</button>
-        </div>
-      </div>
-    `;
-    cartList.appendChild(row);
-    total += p.price * item.qty;
-    items += item.qty;
-  });
-
-  subTotalEl.textContent = `KES ${total.toLocaleString()}`;
-  cartCountEl.textContent = items;
-}
-window.renderCart = renderCart;
-
-/* ---------- Cart functions ---------- */
-function addToCart(id, qty=1){
-  const found = cart.find(i=>i.id===id);
-  if(found) found.qty += qty; else cart.push({id, qty});
-  saveCart();
-  // show small confirmation
-  alert('Added to cart');
+function addToCart(name,price){cart.push({name,price});updateCart();}
+function removeFromCart(index){cart.splice(index,1);updateCart();}
+function updateCart(){
+cartItemsContainer.innerHTML='';
+let total=0;
+cart.forEach((item,i)=>{
+cartItemsContainer.innerHTML+=`<div class="cart-item">
+<span>${item.name}</span>
+<span>KSh ${item.price} <button onclick="removeFromCart(${i})">Remove</button></span>
+</div>`;
+total+=item.price;
+});
+cartTotal.textContent=total;
 }
 
-function updateQty(id, delta){
-  const item = cart.find(i=>i.id===id);
-  if(!item) return;
-  item.qty += delta;
-  if(item.qty <= 0) cart = cart.filter(i=>i.id!==id);
-  saveCart();
+function orderNow(name,price){
+const phone='254702035452';
+const text=`LewomPhysioShop\nHello! I want to order: ${name} - KSh ${price}`;
+window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank');
 }
 
-function removeFromCart(id){
-  cart = cart.filter(i=>i.id!==id);
-  saveCart();
+function orderViaWhatsApp(){
+if(cart.length===0){alert('Your cart is empty!');return;}
+let text='LewomPhysioShop\nHello! I want to order:\n';
+cart.forEach(item=>text+=`- ${item.name}: KSh ${item.price}\n`);
+const total=cart.reduce((a,b)=>a+b.price,0);
+text+=`Total: KSh ${total}`;
+window.open(`https://wa.me/254702035452?text=${encodeURIComponent(text)}`,'_blank');
 }
 
-/* ---------- Modal product view ---------- */
-const modal = document.getElementById('modal');
-const modalImg = document.getElementById('modalImg');
-const modalTitle = document.getElementById('modalTitle');
-const modalPrice = document.getElementById('modalPrice');
-const modalDesc = document.getElementById('modalDesc');
-const modalQty = document.getElementById('modalQty');
-const modalAdd = document.getElementById('modalAdd');
-const modalClose = document.getElementById('modalClose');
-let modalProductId = null;
-
-function openModal(id){
-  const p = products.find(x=>x.id===id);
-  modalProductId = id;
-  modalImg.src = p.img;
-  modalTitle.textContent = p.name;
-  modalPrice.textContent = 'KES ' + p.price.toLocaleString();
-  modalDesc.textContent = p.desc;
-  modalQty.value = 1;
-  modal.classList.add('open');
+function openWhatsApp(){
+const phone='254702035452';
+const text='LewomPhysioShop\nHello!';
+window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank');
 }
 
-modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
-modalAdd.addEventListener('click', ()=>{
-  const q = parseInt(modalQty.value || '1', 10);
-  addToCart(modalProductId, q);
-  modal.classList.remove('open');
-});
+function sendMessage(e){e.preventDefault();alert('Message sent successfully! We will contact you soon.');e.target.reset();}
+function toggleMenu(){document.getElementById('nav').classList.toggle('show');}
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
 
-/* Close modal when clicking outside */
-document.querySelectorAll('.modal').forEach(m=>{
-  m.addEventListener('click', (e)=>{ if(e.target === m) m.classList.remove('open'); });
-});
-
-/* ---------- Checkout ---------- */
-const checkoutModal = document.getElementById('checkoutModal');
-const checkoutBtn = document.getElementById('checkoutBtn');
-const checkoutCancel = document.getElementById('checkoutCancel');
-const checkoutForm = document.getElementById('checkoutForm');
-const checkoutSummary = document.getElementById('checkoutSummary');
-const payMethodEl = document.getElementById('payMethod');
-const mpesaInstructions = document.getElementById('mpesaInstructions');
-
-checkoutBtn.addEventListener('click', ()=>{
-  if(cart.length===0){ alert('Cart is empty'); return; }
-  // build summary
-  let total = 0;
-  let summary = '<ul>';
-  cart.forEach(i=>{
-    const p = products.find(x=>x.id===i.id);
-    summary += `<li>${p.name} x ${i.qty} — KES ${ (p.price*i.qty).toLocaleString() }</li>`;
-    total += p.price * i.qty;
-  });
-  summary += `</ul><div><strong>Total: KES ${total.toLocaleString()}</strong></div>`;
-  checkoutSummary.innerHTML = summary;
-  checkoutModal.classList.add('open');
-});
-
-checkoutCancel.addEventListener('click', ()=> checkoutModal.classList.remove('open'));
-
-payMethodEl.addEventListener('change', (e)=>{
-  mpesaInstructions.style.display = e.target.value === 'mpesa' ? 'block' : 'none';
-});
-
-checkoutForm.addEventListener('submit', (e)=>{
-  e.preventDefault();
-  const fd = new FormData(checkoutForm);
-  const order = {
-    id: 'ORD' + Date.now(),
-    name: fd.get('name'),
-    phone: fd.get('phone'),
-    address: fd.get('address'),
-    payMethod: fd.get('payMethod'),
-    items: cart,
-    total: (function(){ let t=0; cart.forEach(i=>{ const p = products.find(x=>x.id===i.id); t += p.price*i.qty }); return t })()
-  };
-  // For demo: store orders in localStorage
-  const orders = JSON.parse(localStorage.getItem('ps_orders') || '[]');
-  orders.unshift(order);
-  localStorage.setItem('ps_orders', JSON.stringify(orders));
-
-  // Clear cart
-  cart = []; saveCart();
-
-  checkoutModal.classList.remove('open');
-  alert('Order placed (demo). Order ID: ' + order.id + '\\nIf you chose MPesa, follow the instructions and send receipt via WhatsApp.');
-});
-
-/* ---------- Order view button ---------- */
-document.getElementById('viewOrdersBtn').addEventListener('click', ()=>{
-  const orders = JSON.parse(localStorage.getItem('ps_orders') || '[]');
-  if(orders.length === 0) return alert('No orders yet.');
-  let out = 'Recent orders:\\n';
-  orders.slice(0,6).forEach(o=>{ out += `${o.id} — ${o.name} KES ${o.total}\\n`; });
-  alert(out);
-});
-
-/* ---------- Search ---------- */
-document.getElementById('searchInput').addEventListener('input', (e)=>{
-  const q = e.target.value.trim().toLowerCase();
-  const filtered = products.filter(p => p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-  renderProducts(filtered);
-});
-
-/* ---------- Init ---------- */
-document.getElementById('year').textContent = new Date().getFullYear();
-renderProducts(products);
-renderCart();
-
-/* expose some functions for inline onclick usage */
-window.addToCart = addToCart;
-window.updateQty = updateQty;
-window.removeFromCart = removeFromCart;
-window.openModal = openModal;
-
-/* Optional: open cart panel when click cart button (simple) */
-document.getElementById('openCart').addEventListener('click', ()=> {
-  window.scrollTo({top:0, behavior:'smooth'});
-  // small visual hint
-  alert('Scroll right side to see your cart and checkout.');
-});
+renderProducts();
 </script>
-  <!-- Floating WhatsApp Chat -->
-<a href="https://wa.me/254700000000?text=Hi%20PhysioShop!%20I%20would%20like%20to%20know%20more%20about%20your%20products."
-   class="whatsapp-float"
-   target="_blank"
-   title="Chat on WhatsApp">
-   <i class="fa-brands fa-whatsapp"></i>
-</a>
 </body>
-    </html>
+</html>
