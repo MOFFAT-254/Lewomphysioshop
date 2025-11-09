@@ -72,6 +72,27 @@
   a{color:var(--accent); text-decoration:none}
   /* small utilities */
   .muted{color:var(--muted)}
+  .whatsapp-float {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  background-color: #25d366;
+  color: white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-size: 26px;
+  z-index: 1000;
+  transition: transform 0.25s ease;
+}
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  background-color: #20ba5a;
+}
 </style>
 </head>
 <body>
@@ -454,5 +475,12 @@ document.getElementById('openCart').addEventListener('click', ()=> {
   alert('Scroll right side to see your cart and checkout.');
 });
 </script>
+  <!-- Floating WhatsApp Chat -->
+<a href="https://wa.me/254700000000?text=Hi%20PhysioShop!%20I%20would%20like%20to%20know%20more%20about%20your%20products."
+   class="whatsapp-float"
+   target="_blank"
+   title="Chat on WhatsApp">
+   <i class="fa-brands fa-whatsapp"></i>
+</a>
 </body>
     </html>
